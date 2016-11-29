@@ -1029,10 +1029,13 @@ EA_DISABLE_GCC_WARNING(-Warray-bounds)
 
 			for(;;)
 			{
-				const size_type fbiw = GetFirstBit(this_word);
+				if (this_word > 0)
+				{
+					const size_type fbiw = GetFirstBit(this_word);
 
-				if(fbiw != kBitsPerWord)
-					return (word_index * kBitsPerWord) + fbiw;
+					if (fbiw != kBitsPerWord)
+						return (word_index * kBitsPerWord) + fbiw;
+				}
 
 				if(++word_index < NW)
 					this_word = mWord[word_index];
@@ -1084,10 +1087,13 @@ EA_RESTORE_GCC_WARNING()
 
 			for(;;)
 			{
-				const size_type lbiw = GetLastBit(this_word);
+				if (this_word > 0)
+				{
+					const size_type lbiw = GetLastBit(this_word);
 
-				if(lbiw != kBitsPerWord)
-					return (word_index * kBitsPerWord) + lbiw;
+					if (lbiw != kBitsPerWord)
+						return (word_index * kBitsPerWord) + lbiw;
+				}
 
 				if(word_index > 0)
 					this_word = mWord[--word_index];
