@@ -994,10 +994,12 @@ namespace eastl
 	{
 		for(size_type word_index = 0; word_index < NW; ++word_index)
 		{
-			const size_type fbiw = GetFirstBit(mWord[word_index]);
-
-			if(fbiw != kBitsPerWord)
-				return (word_index * kBitsPerWord) + fbiw;
+			if (mWord[word_index] > 0)
+			{
+				const size_type fbiw = GetFirstBit(mWord[word_index]);
+				if (fbiw != kBitsPerWord)
+					return (word_index * kBitsPerWord) + fbiw;
+			}
 		}
 
 		return (size_type)NW * kBitsPerWord;
@@ -1054,10 +1056,12 @@ EA_RESTORE_GCC_WARNING()
 	{
 		for(size_type word_index = (size_type)NW; word_index > 0; --word_index)
 		{
-			const size_type lbiw = GetLastBit(mWord[word_index - 1]);
-
-			if(lbiw != kBitsPerWord)
-				return ((word_index - 1) * kBitsPerWord) + lbiw;
+			if (mWord[word_index - 1] > 0)
+			{
+				const size_type lbiw = GetLastBit(mWord[word_index - 1]);
+				if (lbiw != kBitsPerWord)
+					return ((word_index - 1) * kBitsPerWord) + lbiw;
+			}
 		}
 
 		return (size_type)NW * kBitsPerWord;
