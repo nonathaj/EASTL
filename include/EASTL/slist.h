@@ -194,6 +194,7 @@ namespace eastl
 	protected:
 		SListBase();
 		SListBase(const allocator_type& a);
+		SListBase(allocator_type&& a);
 	   ~SListBase();
 
 		node_type* DoAllocateNode();
@@ -265,6 +266,7 @@ namespace eastl
 	public:
 		slist();
 		slist(const allocator_type& allocator);
+		slist(allocator_type&& a);
 		explicit slist(size_type n, const allocator_type& allocator = EASTL_SLIST_DEFAULT_ALLOCATOR);
 		slist(size_type n, const value_type& value, const allocator_type& allocator = EASTL_SLIST_DEFAULT_ALLOCATOR);
 		slist(const this_type& x);
@@ -691,6 +693,18 @@ namespace eastl
 
 
 	template <typename T, typename Allocator>
+	inline SListBase<T, Allocator>::SListBase(allocator_type&& allocator)
+		: mNode(),
+#if EASTL_SLIST_SIZE_CACHE
+		mSize(0),
+#endif
+		mAllocator(eastl::move(allocator))
+	{
+		mNode.mpNext = NULL;
+	}
+
+
+	template <typename T, typename Allocator>
 	inline SListBase<T, Allocator>::~SListBase()
 	{
 		DoEraseAfter((SListNodeBase*)&mNode, NULL);
@@ -789,6 +803,14 @@ namespace eastl
 	template <typename T, typename Allocator>
 	inline slist<T, Allocator>::slist(const allocator_type& allocator)
 		: base_type(allocator)
+	{
+		// Empty
+	}
+
+
+	template <typename T, typename Allocator>
+	inline slist<T, Allocator>::slist(allocator_type&& allocator)
+		: base_type(eastl::move(allocator))
 	{
 		// Empty
 	}
