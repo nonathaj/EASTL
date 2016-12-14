@@ -62,7 +62,7 @@ namespace eastl
 	namespace Internal
 	{
 		// utility to switch between exceptions and asserts
-		void DoBadAnyCast()
+		inline void DoBadAnyCast()
 		{
 			#if EASTL_EXCEPTIONS_ENABLED
 				throw bad_any_cast();
@@ -330,8 +330,10 @@ namespace eastl
 		storage_handler_ptr m_handler;
 
 	public:
-		// TODO(rparolin):  renable constexpr
-		// EA_CONSTEXPR 
+			#ifndef EA_COMPILER_GNUC
+				// TODO(rparolin):  renable constexpr for GCC
+				EA_CONSTEXPR 
+			#endif
 			any() EA_NOEXCEPT 
 			: m_storage(), m_handler(nullptr) {}
 
@@ -476,7 +478,7 @@ namespace eastl
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// 20.7.4, non-member functions
 	//
-	void swap(any& rhs, any& lhs) EA_NOEXCEPT { rhs.swap(lhs); }
+	inline void swap(any& rhs, any& lhs) EA_NOEXCEPT { rhs.swap(lhs); }
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////
