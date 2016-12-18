@@ -244,6 +244,10 @@ namespace eastl
 		explicit bitvector(size_type n, const allocator_type& allocator = EASTL_BITVECTOR_DEFAULT_ALLOCATOR);
 		bitvector(size_type n, value_type value, const allocator_type& allocator = EASTL_BITVECTOR_DEFAULT_ALLOCATOR);
 		bitvector(const bitvector& copy);
+		#if EASTL_MOVE_SEMANTICS_ENABLED
+			bitvector(bitvector&& move);
+		#endif
+
 
 		template <typename InputIterator>
 		bitvector(InputIterator first, InputIterator last);
@@ -1408,6 +1412,15 @@ namespace eastl
 	  : mContainer(copy.mContainer), 
 		mFreeBitCount(copy.mFreeBitCount)
 	{
+	}
+
+
+	template <typename Allocator, typename Element, typename Container>
+	bitvector<Allocator, Element, Container>::bitvector(bitvector&& move)
+		: mContainer(eastl::move(move.mContainer)),
+		mFreeBitCount(move.mFreeBitCount)
+	{
+		move.mFreeBitCount = 0;
 	}
 
 
